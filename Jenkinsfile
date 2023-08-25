@@ -12,11 +12,16 @@ pipeline {
                     // Connect to the remote EC2 instance using SSH
                     sshagent(credentials: [SSH_KEY]) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no -i \$SSH_KEY_PATH ec2-user@\$REMOTE_HOST '
-                                # Commands you want to execute on the remote instance
-                                # For example:
-                                echo \"Connected to remote instance.\"
-                            '
+                            [5:11 PM, 8/25/2023] Ahsan Khan Boss: mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          if [[ $BRANCH_NAME == 'qa.lambdax.ai' ]]; then
+            echo "${{ secrets.SSH_KEY_VERTEX }}" > ~/.ssh/id_rsa
+          fi
+        
+          chmod 400 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+[5:12 PM, 8/25/2023] Ahsan Khan Boss: run: ssh  -o "StrictHostKeyChecking no" -i ~/.ssh/id_rsa ${{ env.EC2_USER }}@${{ env.EC2_HOSTNAME }} 'echo ${{ secrets.DOCKER_PASSWORD }} | sudo docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin'
                         """
                     }
                 }
