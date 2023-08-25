@@ -9,7 +9,7 @@ pipeline {
                     echo "hello-world"
                     // SSH into the remote EC2 instance and execute commands
                     sshScript = '''
-                        ssh -i "open.pem" ubuntu@ec2-65-0-130-110.ap-south-1.compute.amazonaws.com '
+                        ssh -i "ssh-keyscan 65.0.130.110 >> ~/.ssh/known_hosts '
                             # Commands to run on the remote instance
                             # For example:
                             echo "Connected to remote instance"
